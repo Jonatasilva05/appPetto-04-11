@@ -26,11 +26,9 @@ const PacienteCard = ({ paciente }: { paciente: Paciente }) => {
     return (
         <TouchableOpacity 
             style={[styles.card, { backgroundColor: colors.background, shadowColor: colors.text }]}
-            // MUDANÇA 2: Usar o formato de objeto para a navegação, que é 100% seguro com TypeScript
-            onPress={() => router.push({
-                pathname: '/(vet)/paciente/[petId]',
-                params: { petId: paciente.id_pet }
-            })}
+            onPress={() => {
+            router.push({ pathname: '/paciente/[petId]', params: { petId: String(paciente.id_pet) } });
+        }}
         >
             <Image source={imageSource} style={styles.petImage} />
             <View style={styles.cardInfo}>
