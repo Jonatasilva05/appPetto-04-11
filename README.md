@@ -1,7 +1,3 @@
-# Bem-Vindo ao Petto
-## Aqui você encontra o melhor lugar para cuidar e monitorar o seu pet na palma de suas mãos
+# BEM VINDO A APLICAÇÃO MOBILE DO PETTO
 
-Somos o melhor site e agora com aplicativo para seu dispositivo móvel, só aqui você encontra:
-
-- Saber tudo sobre a raça do seu pet
-# appPetto_14-08-testeday22
+### Esse arquivo está em fase de desenvolvimento, e vale ressaltar que esse arquivo é o projeto secundario do app original, é a segunda copia que ate então não testei para ver se realmente esta funcionando, diferente do que esta na branch main, ele sim foi testado e esta funcionando corretamente!
