@@ -8,6 +8,8 @@ import { useAuth, API_URL } from '@/app/context/AuthContext';
 import { PET_DATA } from '@/data/databasePets';
 import { HEALTH_DATA, HealthItem } from '@/data/databaseMedi';
 import HistoricoItemCard from '@/app/components/HistoricoItemCard';
+// Importação adicionada para o seletor de data
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 interface HistoricoSaudeItem {
     id: string;
@@ -21,6 +23,11 @@ export default function CadastrarPetScreen() {
   const { getAuthHeader } = useAuth();
   const [etapa, setEtapa] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  // --- Novos estados para o DatePicker ---
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [datePickerDate, setDatePickerDate] = useState(new Date());
+  // ----------------------------------------
 
   const [foto, setFoto] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [nome, setNome] = useState('');
@@ -137,20 +144,85 @@ export default function CadastrarPetScreen() {
         }
     };
   const etapaAnterior = () => setEtapa((prev) => prev - 1);
+
+  // --- Função de Validação de Data ---
+  const isValidDate = (dateString: string): boolean => {
+    // 1. Verifica o formato DD/MM/AAAA
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+      return false;
+    }
+
+    // 2. Extrai as partes
+    const parts = dateString.split('/');
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10); // 1-12
+    const year = parseInt(parts[2], 10);
+
+    // 3. Verifica valores básicos
+    if (year < 1900 || month < 1 || month > 12) {
+      return false;
+    }
+
+    // 4. Cria a data e verifica se é válida (ex: 30/02)
+    const date = new Date(year, month - 1, day); // month - 1 porque é 0-indexado
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+      return false;
+    }
+    
+    // 5. (Importante para Nascimento) Verifica se a data não é no futuro
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zera a hora para comparar só a data
+    if (date > today) {
+      return false;
+    }
+
+    return true;
+  };
+
+  // --- NOVA FUNÇÃO DE VALIDAÇÃO INSTANTÂNEA ---
+  const validateDateOnBlur = () => {
+    // Não valida se o checkbox "Não sei" estiver marcado ou se o campo estiver vazio
+    if (naoSeiDataNascimento || !dataNascimento) {
+      return;
+    }
+    
+    // Se o campo tiver conteúdo, valida
+    if (!isValidDate(dataNascimento)) {
+      Alert.alert(
+        'Data Inválida',
+        'A data de nascimento digitada não é válida ou está no futuro. Por favor, corrija (DD/MM/AAAA).'
+      );
+    }
+  };
+  // ------------------------------------------------
+
   const proximaEtapa = () => {
     if (etapa === 1 && (!nome.trim() || !especie || !raca)) {
       Alert.alert('Atenção', 'Preencha Nome, Espécie e Raça para avançar.');
       return;
     }
     if (etapa === 2) {
-      const isDataNascimentoValida =
-        !naoSeiDataNascimento && dataNascimento.match(/^\d{2}\/\d{2}\/\d{4}$/);
+      // --- Bloco de validação da Etapa 2 atualizado ---
+      const dataDigitada = dataNascimento.trim() !== '';
+      const formatoCorreto = dataNascimento.match(/^\d{2}\/\d{2}\/\d{4}$/);
+      const isDataNascimentoValida = !naoSeiDataNascimento && isValidDate(dataNascimento);
       const isIdadeAproximadaValida =
         naoSeiDataNascimento && idadeAprox.trim() !== '';
+      
+      // Verifica se o usuário digitou algo, no formato certo, mas a data é inválida (ex: 30/02 ou data futura)
+      if (!naoSeiDataNascimento && dataDigitada && formatoCorreto && !isDataNascimentoValida) {
+        Alert.alert(
+          'Data Inválida',
+          'A data de nascimento digitada não é válida ou está no futuro. Verifique o dia, mês e ano.',
+        );
+        return;
+      }
+
+      // Validação principal: ou a data é válida, ou a idade aproximada é válida
       if (!isDataNascimentoValida && !isIdadeAproximadaValida) {
         Alert.alert(
           'Atenção',
-          'Informe a Data de Nascimento ou uma Idade Aproximada para avançar.',
+          'Informe uma Data de Nascimento válida (DD/MM/AAAA) ou uma Idade Aproximada para avançar.',
         );
         return;
       }
@@ -178,16 +250,20 @@ export default function CadastrarPetScreen() {
       ]);
       return;
     }
-    const isDataNascimentoValida =
-      !naoSeiDataNascimento && dataNascimento.match(/^\d{2}\/\d{2}\/\d{4}$/);
+    
+    // --- Bloco de validação da Etapa 2 atualizado ---
+    const isDataNascimentoValida = !naoSeiDataNascimento && isValidDate(dataNascimento);
     const isIdadeAproximadaValida =
       naoSeiDataNascimento && idadeAprox.trim() !== '';
+    
     if ((!isDataNascimentoValida && !isIdadeAproximadaValida) || !sexo) {
-      Alert.alert('Erro', 'Os dados de idade e sexo são obrigatórios.', [
+      Alert.alert('Erro', 'Os dados de idade e sexo são obrigatórios. Verifique a data de nascimento ou a idade aproximada.', [
         { text: 'OK', onPress: () => setEtapa(2) },
       ]);
       return;
     }
+    // --- Fim do bloco de validação ---
+
     if (foiVacinado === 'sim' && historicoVacinas.length === 0) {
       Alert.alert(
         'Atenção',
@@ -280,7 +356,7 @@ export default function CadastrarPetScreen() {
     try {
       const response = await fetch(`${API_URL}/pets`, {
         method: 'POST',
-        headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' },
+        headers: { ...getAuthHeader(), 'Content-Type': 'multipart-form-data' },
         body: formData,
       });
       const data = await response.json();
@@ -294,6 +370,42 @@ export default function CadastrarPetScreen() {
       setIsLoading(false);
     }
   };
+
+  // --- Novas funções para o DatePicker ---
+  const openDatePicker = () => {
+    // Tenta converter a data digitada para o seletor
+    const parts = dataNascimento.split('/');
+    let currentDate = new Date();
+    if (parts.length === 3) {
+      const [day, month, year] = parts.map(Number);
+      if (day && month && year > 1900) {
+        currentDate = new Date(year, month - 1, day); // Mês é 0-indexado
+      }
+    }
+    setDatePickerDate(currentDate);
+    setShowDatePicker(true);
+  };
+
+  const onChangeDatePicker = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    // Esconde o seletor
+    setShowDatePicker(false);
+    
+    if (event.type === 'set' && selectedDate) {
+      // Se o usuário selecionou uma data
+      setDatePickerDate(selectedDate);
+      
+      // Formata a data para DD/MM/AAAA
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexado
+      const year = selectedDate.getFullYear();
+      
+      setDataNascimento(`${day}/${month}/${year}`);
+      
+      // Se o usuário selecionou uma data, desmarca o "Não sei a data"
+      setNaoSeiDataNascimento(false);
+    }
+  };
+  // ----------------------------------------
 
   const handleDataNascimentoChange = useCallback(
     (text: string) => {
@@ -569,6 +681,7 @@ export default function CadastrarPetScreen() {
 
           {etapa === 2 && (
             <View style={styles.content}>
+              {/* --- BLOCO DE DATA DE NASCIMENTO MODIFICADO --- */}
               <View style={styles.labelComCheckbox}>
                 <Text style={styles.inputLabel}>Data de Nascimento</Text>
                 <TouchableOpacity
@@ -586,19 +699,38 @@ export default function CadastrarPetScreen() {
                   <Text style={styles.checkboxLabel}>Não sei a data</Text>
                 </TouchableOpacity>
               </View>
-              <TextInput
-                style={[
-                  styles.input,
-                  naoSeiDataNascimento && styles.inputDisabled,
-                ]}
-                placeholder="DD/MM/AAAA"
-                placeholderTextColor="#888"
-                value={dataNascimento}
-                onChangeText={handleDataNascimentoChange}
-                maxLength={10}
-                keyboardType="number-pad"
-                editable={!naoSeiDataNascimento}
-              />
+              
+              <View style={[
+                  styles.inputIconContainer,
+                  naoSeiDataNascimento && styles.inputDisabled
+              ]}>
+                <TextInput
+                  style={styles.inputComIcone}
+                  placeholder="DD/MM/AAAA"
+                  placeholderTextColor="#888"
+                  value={dataNascimento}
+                  onChangeText={handleDataNascimentoChange}
+                  maxLength={10}
+                  keyboardType="number-pad"
+                  editable={!naoSeiDataNascimento}
+                  // --- ADICIONADO onBlur ---
+                  onBlur={validateDateOnBlur}
+                  // -------------------------
+                />
+                <TouchableOpacity 
+                  onPress={openDatePicker} 
+                  disabled={naoSeiDataNascimento}
+                  style={styles.calendarIcon}
+                >
+                  <Ionicons 
+                    name="calendar-outline" 
+                    size={24} 
+                    color={naoSeiDataNascimento ? '#555' : '#fff'} 
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* --- FIM DO BLOCO MODIFICADO --- */}
+
               {naoSeiDataNascimento && (
                 <View style={{ marginTop: 20 }}>
                   <Text style={styles.inputLabel}>Idade Aproximada</Text>
@@ -987,6 +1119,18 @@ export default function CadastrarPetScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
 
+      {/* --- Componente DatePicker Adicionado --- */}
+      {showDatePicker && (
+        <RNDateTimePicker
+          value={datePickerDate}
+          mode="date"
+          display="default"
+          onChange={onChangeDatePicker}
+          maximumDate={new Date()}
+        />
+      )}
+      {/* ----------------------------------------- */}
+
       <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -1124,6 +1268,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
+  // --- Novos estilos para o input com ícone ---
+  inputIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  inputComIcone: {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    color: '#fff',
+    fontSize: 18,
+  },
+  calendarIcon: {
+    padding: 10,
+    paddingRight: 15,
+  },
+  // ------------------------------------------
   botoesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
