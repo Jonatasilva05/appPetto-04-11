@@ -1,0 +1,260 @@
+/* =====================================================
+    CSS DASHBOARD
+=====================================================
+*/
+
+/* --- Variáveis (Recriadas por segurança, se já estiverem no admin.css, ignore) --- */
+:root {
+    --primary-color: #0b2545; /* Azul Escuro Principal */
+    --success-color: #2ecc71; /* Verde de Sucesso */
+    --danger-color: #e74c3c; /* Vermelho de Erro/Perigo */
+    --warning-color: #f39c12; /* Laranja de Alerta */
+    --info-color: #3498db; /* Azul de Informação */
+    --highlight-color: #1abc9c; /* Verde/Ciano de Destaque */
+    --background-light: #f4f6f9; 
+}
+
+
+/* --- Grid de Widgets --- */
+.widget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.widget {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid transparent;
+}
+.widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores e Bordas dos Widgets */
+.widget.primary { border-color: var(--primary-color); }
+.widget.success { border-color: var(--success-color); }
+.widget.info { border-color: var(--info-color); }
+.widget.warning { border-color: var(--warning-color); }
+
+/* Ícone */
+.widget .icon-wrap {
+    font-size: 2.5rem;
+    padding: 15px;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.widget.primary .icon-wrap { background-color: rgba(11, 37, 69, 0.1); color: var(--primary-color); }
+.widget.success .icon-wrap { background-color: rgba(46, 204, 113, 0.1); color: var(--success-color); }
+.widget.info .icon-wrap { background-color: rgba(52, 152, 219, 0.1); color: var(--info-color); }
+.widget.warning .icon-wrap { background-color: rgba(243, 156, 18, 0.1); color: var(--warning-color); }
+
+/* Texto/Valores */
+.widget .info {
+    text-align: right;
+}
+.widget .info .label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.widget .info .value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+
+/* --- Seção de Atividades Recentes --- */
+.main-section {
+    background-color: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); 
+}
+.main-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+.main-section .intro-text {
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+}
+.activity-list li {
+    padding: 12px 0;
+    border-bottom: 1px dashed #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    color: #333;
+}
+.activity-list li:last-child {
+    border-bottom: none;
+}
+.activity-list .info-icon {
+    color: var(--info-color);
+    margin-right: 15px;
+    font-size: 1.1rem;
+}
+.activity-list .date {
+    color: #999;
+    font-size: 0.85rem;
+    font-style: italic;
+    flex-shrink: 0;
+}
+
+
+/* --- Responsividade (Para manter a consistência do layout) --- */
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0; 
+        width: 100%; 
+        padding: 20px; 
+    }
+    .widget-grid {
+        gap: 20px;
+    }
+    .activity-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 0;
+    }
+    .activity-list .date {
+        margin-top: 5px;
+        align-self: flex-end;
+    }
+}
+
+
+/* =====================================================
+    NOVO CSS PARA STATUS OPERACIONAL
+===================================================== */
+
+/* Grid Secundário (manter o mesmo) */
+.secondary-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Estilo Básico para a nova caixa de Status (usando o mesmo padrão de visual) */
+.status-section, .quick-access-section {
+    background-color: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.status-section h3, .quick-access-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Estilos da Lista de Status */
+.status-list {
+    list-style: none;
+    padding: 0;
+}
+.status-list li {
+    padding: 12px 0;
+    border-bottom: 1px dashed #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    color: #333;
+}
+.status-list li:last-child {
+    border-bottom: none;
+}
+.status-list li i {
+    margin-right: 10px;
+}
+.status-list li span {
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+/* Cores dos Status */
+.status-online i {
+    color: var(--success-color); /* Verde */
+}
+.status-online span {
+    color: white;
+    background-color: var(--success-color);
+}
+.status-warning i {
+    color: var(--warning-color); /* Laranja */
+}
+.status-warning span {
+    color: white;
+    background-color: var(--warning-color);
+}
+.status-error i {
+    color: var(--danger-color); /* Vermelho */
+}
+.status-error span {
+    color: white;
+    background-color: var(--danger-color);
+}
+
+
+/* Estilos de Acesso Rápido (Mantenha o que você tinha do bloco anterior) */
+.quick-links {
+    list-style: none;
+    padding: 0;
+}
+.quick-links li {
+    margin-bottom: 10px;
+}
+.quick-links a {
+    display: block;
+    padding: 10px 15px;
+    background-color: var(--background-light); 
+    color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+.quick-links a:hover {
+    background-color: #e0e6ed;
+    color: var(--primary-color);
+}
+.quick-links a i {
+    margin-right: 10px;
+    color: var(--highlight-color); 
+}
+
+/* Responsividade (Ajuste para telas pequenas) */
+@media (max-width: 992px) {
+    .secondary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* Mantendo estilos da Sidebar e Header no admin.css */

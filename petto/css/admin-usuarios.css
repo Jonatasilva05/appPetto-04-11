@@ -1,0 +1,361 @@
+/* =====================================================
+    CSS APRIMORADO (USUÁRIOS)
+=====================================================
+*/
+
+/* --- 1. VARIÁVEIS GLOBAIS E LAYOUT --- */
+:root {
+    --primary-color: #0b2545; /* Azul Escuro Principal */
+    --secondary-color: #1c456f; /* Azul Secundário (Hover Menu) */
+    --highlight-color: #1abc9c; /* Verde/Ciano de Destaque */
+    --success-color: #2ecc71; /* Verde de Sucesso */
+    --danger-color: #3c9ae7; /* Vermelho de Erro/Perigo */
+    --background-light: #f4f6f9; /* Fundo Claro */
+    --border-color: #d1d5db; /* Cor de Borda Padrão */
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Base Body e Content (Se não estiver no admin.css) */
+body { display: flex; background-color: var(--background-light); }
+.content { 
+    margin-left: 260px; 
+    padding: 40px; 
+    width: calc(100% - 260px); 
+}
+header h1 { 
+    color: var(--primary-color); 
+    font-weight: 700; 
+    margin-bottom: 5px;
+    font-size: 3rem;
+}
+header p {
+    color: #6c757d; 
+    margin-bottom: 25px; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 15px; 
+    font-size: 1.5rem;
+}
+
+.list-section { 
+    background-color: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    margin-top: 30px; 
+}
+.list-section h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* --- Sidebar (Estilo) --- */
+.sidebar { 
+    width: 260px; 
+    background: var(--primary-color); 
+    color: white; 
+    position: fixed; 
+    height: 100vh; 
+    padding: 0; 
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+.sidebar .logo { 
+    display: flex; 
+    justify-content: center; 
+    padding: 30px 20px 30px 20px; 
+}
+.sidebar .logo img { 
+    max-width: 140px; 
+    height: auto; 
+}
+.sidebar ul { list-style: none; padding: 20px 0; }
+.sidebar ul li a { 
+    color: white; 
+    text-decoration: none; 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    padding: 14px 20px 14px 30px; 
+    transition: all 0.3s ease; 
+    border-left: 5px solid transparent; 
+    font-weight: 500;
+}
+.sidebar ul li a i { font-size: 1.1rem; }
+.sidebar ul li a.active, .sidebar ul li a:hover { 
+    background: var(--secondary-color); 
+    border-left: 5px solid var(--highlight-color); 
+}
+
+
+/* --- 2. ESTILO DA BARRA DE PESQUISA E ALERTAS --- */
+.search-container {
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+}
+.search-container input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.search-container input:focus {
+    border-color: var(--highlight-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+}
+
+/* Estilo para a Mensagem Flash (Alert) */
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; 
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* --- 3. ESTILO DA TABELA E TAGS DE ROLE --- */
+.table-responsive {
+    overflow-x: auto; 
+}
+.data-table { 
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0;
+    min-width: 800px; 
+}
+.data-table th { 
+    background-color: var(--primary-color); 
+    color: white; 
+    padding: 15px; 
+    text-align: left;
+    font-weight: 600;
+}
+.data-table thead tr:first-child th:first-child { border-top-left-radius: 10px; }
+.data-table thead tr:first-child th:last-child { border-top-right-radius: 10px; }
+
+.data-table td { 
+    padding: 15px; 
+    border-bottom: 1px solid var(--border-color); 
+    vertical-align: middle;
+}
+.data-table tbody tr:last-child td {
+    border-bottom: none; 
+}
+
+/* Tag de Role */
+.role-tag {
+    display: inline-block; padding: 4px 10px; border-radius: 5px; font-weight: 700;
+    font-size: 0.85rem; text-transform: uppercase; min-width: 100px; text-align: center;
+}
+.role-tag.tutor { background-color: #e8f5e9; color: var(--success-color); }
+.role-tag.vet { background-color: #e3f2fd; color: #1976d2; }
+
+/* Avatar */
+.user-name-cell { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--highlight-color); }
+.user-avatar-placeholder { display: flex; justify-content: center; align-items: center; width: 35px; height: 35px; border-radius: 50%; background-color: var(--secondary-color); color: white; font-size: 1.1rem; }
+
+/* Botões de Ação na Tabela */
+.data-table .btn-sm {
+    transition: background-color 0.2s, transform 0.1s;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px; 
+    padding: 6px 10px; 
+    cursor: pointer;
+    color: white;
+}
+.data-table .btn-sm i {
+    margin-right: 5px;
+}
+.data-table .btn-sm:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.btn-edit { background-color: var(--success-color) !important; }
+.btn-delete { background-color: var(--danger-color) !important; }
+
+
+/* --- 4. MODAL E FOCO NO VETERINÁRIO --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); overflow: auto; }
+.modal-content { 
+    background-color: #fefefe; 
+    margin: 3% auto; 
+    padding: 30px; 
+    width: 90%; 
+    max-width: 850px; 
+    border-radius: 12px; 
+    position: relative; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.modal-content .close { 
+    float: right; font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa;
+    transition: color 0.2s;
+}
+.modal-content .close:hover {
+    color: var(--danger-color);
+}
+
+
+.photo-update-container { display: grid; grid-template-columns: 150px 1fr; gap: 20px; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+#modalPhotoPreview { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--highlight-color); }
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.form-group input { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid var(--border-color); 
+    border-radius: 8px; 
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus {
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+    outline: none;
+}
+.form-fieldset { grid-column: 1 / -1; background-color: var(--background-light); padding: 20px; border-radius: 8px; margin-top: 15px; }
+.form-fieldset h4 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 5px;
+}
+
+/* Botão Salvar no Modal */
+.btn-primary.full-width {
+    background-color: var(--highlight-color); 
+    color: white; 
+    border: none; 
+    padding: 15px; 
+    border-radius: 8px; 
+    width: 100%; 
+    margin-top: 25px; 
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.btn-primary.full-width:hover {
+    background-color: #16a085 !important;
+    transform: translateY(-2px);
+}
+
+
+/* --- 5. RESPONSIVIDADE --- */
+
+@media (max-width: 768px) {
+    /* Sidebar Horizontal no mobile */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding-bottom: 0;
+    }
+    .sidebar .logo {
+        padding: 20px;
+    }
+    .sidebar ul {
+        display: flex; 
+        overflow-x: auto; 
+        padding: 0 10px;
+        justify-content: flex-start;
+    }
+    .sidebar ul li a {
+        padding: 10px 15px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        flex-shrink: 0; 
+    }
+    .sidebar ul li a.active, .sidebar ul li a:hover {
+        border-left: none;
+        border-bottom: 3px solid var(--highlight-color);
+        background: transparent;
+    }
+    .sidebar ul li a i {
+        display: none; 
+    }
+
+    .content { 
+        margin-left: 0; 
+        width: 100%; 
+        padding: 20px; 
+    }
+    
+    /* Esconde colunas menos importantes */
+    .data-table th:nth-child(1), 
+    .data-table td:nth-child(1),
+    .data-table th:nth-child(4), 
+    .data-table td:nth-child(4) {
+        display: none;
+    }
+    
+    .data-table td, .data-table th {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    .form-grid {
+        grid-template-columns: 1fr; 
+    }
+}
+
+@media (max-width: 600px) {
+    /* E-mail desaparece */
+    .data-table th:nth-child(3), 
+    .data-table td:nth-child(3) {
+        display: none;
+    }
+
+    /* Botões de ação viram ícones */
+    .data-table .btn-sm {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+        width: 30px; 
+        overflow: hidden;
+        white-space: nowrap;
+        text-indent: 100%; 
+        position: relative;
+    }
+    .data-table .btn-sm i {
+        margin-right: 0; 
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-indent: 0; 
+    }
+}

@@ -1,0 +1,308 @@
+/* --- 1. VARIÁVEIS GLOBAIS --- */
+:root {
+   --primary-color: #0b2545; /* Azul Escuro */
+    --secondary-color: #1c456f; /* Azul Secundário */
+    --highlight-color: #1abc9c; /* Verde Petto */
+    --text-light: #f4f7f6;
+    --text-dark: #333333;
+    --font-stack: 'Inter', sans-serif;
+    --border-color: #d1d5db; /* Borda mais suave */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --font-size-title: 2rem;
+    --font-size-label: 0.95rem;
+    --link-secondary-light: #4a6c90; /* Cor um pouco mais clara para links secundários */
+}
+
+/* --- 2. ESTILOS DE LAYOUT GERAL --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.register-body {
+    background-image: url('/petto/img/fundo.jpg'); 
+    background-size: cover;
+    background-position: center; 	 
+    background-repeat: no-repeat; 	
+    background-attachment: fixed; 	
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: var(--font-stack);
+    color: var(--text-dark);
+}
+.register-section {
+    display: flex;
+    box-shadow: 0 20px 40px var(--shadow-color);
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 550px;
+    max-width: 900px;
+    width: 95%;
+}
+
+/* --- 3. OVERLAY LATERAL (50%) --- */
+.register-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: flex-start;
+    color: var(--text-light);
+    width: 50%;
+    box-sizing: border-box;
+}
+.overlay-content {
+    text-align: center;
+    width: 100%;
+    margin: 0 auto; 
+}
+.overlay-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+.overlay-content p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Botão Voltar (NOVO ÍCONE FA-ARROW-LEFT para Desktop/Overlay) */
+.btn-back-mobile {
+    position: absolute;
+    top: 15px; 
+    left: 15px;
+    z-index: 10;
+    font-size: 2rem; 
+    font-weight: 900; 
+    line-height: 1;
+    color: white; 
+    transition: color 0.3s;
+    text-decoration: none;
+}
+.btn-back-mobile:hover {
+    color: var(--highlight-color);
+}
+.btn-back-mobile .fa-arrow-left {
+    font-weight: 900; 
+}
+
+/* --- 4. CONTAINER DO FORMULÁRIO (50%) --- */
+.register-container {
+    position: relative;
+    padding: 2rem; /* Padding original restaurado */
+    min-width: 350px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    background: white; 
+    width: 50%;
+    box-sizing: border-box;
+}
+
+/* Link Voltar para mobile (NOVO ÍCONE FA-ARROW-LEFT) */
+.btn-back-link {
+    position: absolute; 
+    top: 20px;
+    left: 20px;
+    color: var(--secondary-color);
+    font-size: 2rem; 
+    font-weight: 900; 
+    text-decoration: none;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.btn-back-link:hover {
+    color: var(--primary-color);
+}
+.btn-back-link .fa-arrow-left {
+    font-weight: 900;
+}
+@media (min-width: 993px) {
+    .btn-back-link {
+        display: none;
+    }
+}
+
+
+/* Título Login */
+.form-title {
+    color: var(--primary-color);
+    font-size: var(--font-size-title); 
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 1px;
+    /* CORRIGIDO: Adiciona 2rem de espaço acima do título */
+    margin-top: 2rem; 
+    
+    /* Mantém 2rem de espaço abaixo do título (ajuste se precisar de mais) */
+}
+.form-title span {
+    position: relative;
+    display: inline-block;
+}
+.form-title span::after {
+    content: '';
+    position: absolute;
+    width: 50px; 
+    height: 3px; 
+    bottom: -10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--highlight-color); 
+    border-radius: 2px;
+}
+
+
+/* --- 6. CAMPOS DE INPUT E ROTULOS (COMPACTOS) --- */
+.form-group {
+    margin-bottom: 1rem; 
+}
+.form-group label {
+    display: block; 
+    font-weight: 700; 
+    color: var(--primary-color);
+    margin-bottom: 0.3rem; 
+    font-size: var(--font-size-label); 
+    letter-spacing: 0.5px;
+    text-transform: capitalize; 
+}
+.form-group input {
+    width: 100%;
+    padding: 0.7rem; /* Compacto */
+    border: 1px solid var(--border-color);
+    border-radius: 8px; 
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus {
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2); 
+    background-color: white;
+    outline: none;
+}
+/* CAMPO DE SENHA: Mais afastado do botão Entrar */
+.form-group:nth-last-child(2) {
+    margin-bottom: 1.5rem; 
+}
+
+/* --- 7. BOTÕES DE AÇÃO (Estilo Input, Discreto) --- */
+.btn-base {
+    padding: 0.8rem; 
+    border-radius: 8px; 
+    font-weight: 800; 
+    letter-spacing: 1.5px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 1px solid var(--highlight-color); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+.btn-highlight {
+    background-color: var(--highlight-color);
+    color: white;
+}
+.btn-highlight:hover {
+    background-color: #16a085;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.full-width {
+    width: 100%;
+}
+
+/* --- 8. RODAPÉ (Links Separados e sem Linha) --- */
+
+/* Link Esqueceu a Senha (Fica acima) */
+.forgot-password-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem; /* Espaçamento abaixo para a próxima seção */
+}
+.forgot-password-link a {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem; 
+    transition: color 0.2s;
+}
+.forgot-password-link a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Área de Cadastro (Fica abaixo e sem linha) */
+.registration-footer {
+    text-align: center;
+    margin-top: 0; 
+    padding-top: 0; 
+    border-top: none; /* REMOÇÃO DA LINHA DE SEPARAÇÃO */
+}
+.registration-footer p {
+    margin-bottom: 0;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    display: inline;
+}
+
+/* Link Cadastre-se (Cor mais clara e "s" minúsculo) */
+.registration-footer a {
+    color: var(--link-secondary-light); /* Cor ligeiramente mais clara: #4a6c90 */
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem; 
+    letter-spacing: 0.1px;
+    margin-left: 0.3rem;
+    transition: color 0.2s;
+}
+.registration-footer a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* --- 9. RESPONSIVIDADE --- */
+@media (max-width: 992px) {
+    .register-overlay {
+        display: none; /* Oculta a coluna lateral em mobile */
+    }
+    .register-container {
+        width: 100%; /* Ocupa 100% da seção */
+        padding: 1.5rem; 
+    }
+}
+
+/* Estilo para a mensagem de erro (Somente Texto Vermelho) */
+.alert-error {
+    text-align: center; /* Centraliza o texto */
+    font-weight: bold; /* Deixa em negrito */
+    color: #e74c3c; /* Apenas o texto em Vermelho forte */
+    background-color: transparent; /* Remove o fundo */
+    border-radius: 0; /* Remove a borda arredondada */
+    padding: 0; /* Remove o preenchimento */
+    display: none; 
+    opacity: 0; 
+    transition: opacity 0.5s ease-out; 
+}
+/* Estilo para a mensagem de sucesso (Aproveitando a estrutura para mantê-la simples) */
+.alert-success {
+    text-align: center;
+    font-weight: bold;
+    color: var(--highlight-color); /* Usa o verde Petto */
+    background-color: transparent;
+    border-radius: 0;
+    padding: 0;
+    display: none; 
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+.alert-placeholder.active .alert {
+    display: block;
+    opacity: 1; /* Torna visível */
+}

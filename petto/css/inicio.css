@@ -1,0 +1,894 @@
+/* --- 1. VARIÁVEIS GLOBAIS E RESET --- */
+
+:root {
+    --primary-color: #0b2545;
+    --secondary-color: #1c456f;
+    --highlight-color: #1abc9c;
+    --text-light: #f4f7f6;
+    --font-stack: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- 2. HEADER E MENU DE NAVEGAÇÃO (menu-footer.css) --- */
+
+.header-sofisticado {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 120px;
+}
+
+.logo-sofisticado {
+    display: flex;
+    align-items: center;
+}
+
+.logo-sofisticado .logo-img {
+    height: 100px;       /* altura ideal da logo dentro do header */
+    width: auto;        /* mantém proporção */
+    display: block;
+    object-fit: contain;
+    margin-right: 15px; /* espaço entre logo e menu */
+}
+
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-nav-sofisticado ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-nav-sofisticado a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.menu-nav-sofisticado a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--highlight-color);
+    transition: width 0.5s ease;
+}
+
+.menu-nav-sofisticado a:hover::after {
+    width: 100%;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+    color: var(--text-light);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.language-selector i {
+    font-size: 16px;
+    color: var(--text-light);
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.language-selector .lang-option {
+    color: var(--text-light);
+    font-weight: 500;
+    padding: 0;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+    text-decoration: none;
+}
+
+.language-selector .lang-option.active-lang {
+    color: var(--highlight-color);
+    font-weight: 700;
+}
+
+.language-selector:hover i {
+    color: var(--highlight-color);
+    opacity: 1;
+}
+
+.language-selector a::after {
+    display: none;
+}
+
+.btn-login-sofisticado {
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: transparent;
+    color: #4dd0e1;
+    padding: 10px 25px;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 2px solid var(--highlight-color);
+    box-shadow: 0 1px 3px rgba(26, 188, 156, 0.1);
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: inline-block;
+}
+
+.btn-login-sofisticado:hover {
+    background-color: transparent;
+    color: #4dd0e1;
+    border-color: var(--highlight-color);
+    transform: scale(1.05);
+    box-shadow: 0 1px 3px rgba(26, 188, 156, 0.1);
+}
+
+/* --- Responsividade do Header --- */
+
+@media (max-width: 900px) {
+    .header-sofisticado {
+        padding: 15px 20px;
+        height: auto;
+    }
+
+    .logo-sofisticado .logo-img {
+        height: 50px;
+        width: auto;
+    }
+
+    .btn-login-sofisticado {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+        color: var(--text-light);
+        font-size: 30px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .menu-nav-sofisticado {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: var(--secondary-color);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        text-align: center;
+        transition: transform 0.3s ease-out;
+    }
+
+    .menu-nav-sofisticado.active {
+        display: block;
+    }
+
+    .menu-nav-sofisticado ul {
+        flex-direction: column;
+        padding: 10px 0;
+        gap: 0;
+    }
+
+    .menu-nav-sofisticado li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        width: 100%;
+    }
+
+    .menu-nav-sofisticado a {
+        display: block;
+        padding: 15px 20px;
+        font-size: 17px;
+    }
+
+    .menu-nav-sofisticado a::after {
+        display: none;
+    }
+
+    .language-selector {
+        justify-content: center;
+        padding: 15px 20px;
+    }
+
+    .menu-nav-sofisticado ul li:last-child {
+        border-bottom: none;
+    }
+}
+
+/* --- 3. FOOTER (menu-footer.css) --- */
+
+.main-footer {
+    background-color: var(--primary-color) !important;
+    padding: 6rem 0 4rem;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
+    color: var(--text-light);
+}
+
+.main-footer .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 3rem;
+}
+
+.footer-col h4 {
+    color: var(--text-light) !important;
+    position: relative;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.footer-col h4::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--highlight-color);
+}
+
+.footer-col p, 
+.footer-col li {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-light) !important;
+    opacity: 0.95;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    padding-left: 5px;
+}
+
+.footer-col ul li:hover {
+    transform: translateX(5px);
+    opacity: 1;
+}
+
+.footer-col ul li::before {
+    content: '▸';
+    color: var(--highlight-color);
+    position: absolute;
+    left: -12px;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease, left 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.footer-col ul li:hover::before {
+    opacity: 1;
+    left: -16px;
+}
+
+.footer-col ul li a {
+    display: inline-block;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    letter-spacing: 0.3px;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.footer-col ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: var(--highlight-color);
+    transition: width 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: var(--highlight-color);
+    transform: translateX(3px);
+}
+
+.footer-col ul li a:hover::after {
+    width: 100%;
+}
+
+.footer-col a {
+    color: var(--text-light) !important;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-col p a {
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-col a:hover {
+    color: var(--highlight-color);
+    opacity: 1;
+}
+
+.footer-col ul li a i {
+    color: var(--highlight-color) !important;
+    font-size: 1.1rem;
+    margin-right: 8px;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 2rem;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-light) !important;
+    opacity: 0.7;
+}
+
+/* --- Responsividade do Footer --- */
+
+@media (max-width: 768px) {
+    .footer-col {
+        margin-bottom: 2rem;
+    }
+}
+
+/* --- 4. SLIDER (inicio.css) --- */
+
+.slider-container {
+    width: 100%;
+    height: 800px; 
+    margin: 0 auto;
+    overflow: hidden; 
+    position: relative;
+    box-shadow: 0 10px 45px rgba(0, 0, 0, 0.5); 
+    font-family: var(--font-stack);
+    flex-shrink: 0; 
+    contain: layout; 
+}
+
+.slides {
+    width: 300%; 
+    height: 100%;
+    display: flex;
+    animation: autoscroll 15s ease-in-out infinite; 
+}
+
+.slide {
+    width: calc(100% / 3); 
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-light); 
+    padding: 40px; 
+    box-sizing: border-box;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.slide-image-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/petto/img/S1.jpg'); 
+}
+
+.slide-image-2 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/petto/img/S2.jpg'); 
+}
+
+.slide-image-3 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/petto/img/S3.jpg'); 
+}
+
+
+.slide-content {
+    z-index: 2; 
+    max-width: 90%;
+    opacity: 0;
+    animation: content-fade-in 1s ease-out forwards;
+}
+
+.slide-content h1 {
+    font-size: 4.8rem; 
+    margin-bottom: 30px;
+    color: var(--highlight-color); 
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9); 
+    font-weight: 900; 
+    letter-spacing: 3px; 
+    position: relative; 
+    padding-bottom: 15px; 
+}
+
+.slide-content h1::after {
+    content: '';
+    display: block;
+    width: 80px; 
+    height: 5px; 
+    background-color: var(--primary-color); 
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    box-shadow: 0 0 10px var(--highlight-color); 
+}
+
+.slide-content p {
+    font-size: 2.3rem; 
+    font-weight: 300;
+    max-width: 950px;
+    margin: 0 auto;
+    color: var(--text-light);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* --- Controle de Slides (Dots) --- */
+.navigation-dots {
+    position: absolute;
+    bottom: 30px; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px; 
+    z-index: 10;
+}
+
+.dot {
+    width: 14px; 
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--primary-color); 
+    opacity: 0.5; 
+    transition: all 0.4s ease;
+    border: 3px solid var(--text-light); 
+    cursor: pointer;
+    animation: autoscroll-dot 15s linear infinite;
+}
+
+/* --- Keyframes de Animação --- */
+
+@keyframes autoscroll {
+    0% { margin-left: 0; } 
+    28% { margin-left: 0; } 
+    33% { margin-left: -100%; } 
+    61% { margin-left: -100%; } 
+    66% { margin-left: -200%; }
+    94% { margin-left: -200%; } 
+    100% { margin-left: 0; } 
+}
+
+@keyframes content-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes autoscroll-dot {
+    0%, 33% { 
+        background-color: var(--highlight-color); 
+        opacity: 1; 
+        transform: scale(1.1); 
+        border-color: var(--text-light); 
+    } 
+    33.01%, 100% { 
+        background-color: var(--primary-color); 
+        opacity: 0.5; 
+        transform: scale(1); 
+        border-color: var(--text-light); 
+    }
+}
+
+.dot-1 { animation-delay: 0s; }
+.dot-2 { animation-delay: -5s; } 
+.dot-3 { animation-delay: -10s; } 
+
+/* --- Responsividade do Slider --- */
+@media (max-width: 768px) {
+    .slider-container {
+        height: 450px; 
+    }
+
+    .slide-content h1 {
+        font-size: 3rem;
+        letter-spacing: 1px;
+    }
+    
+    .slide-content h1::after {
+        width: 50px;
+        height: 3px;
+    }
+    
+    .slide-content p {
+        font-size: 1.6rem;
+    }
+}
+
+
+/* --- 5. SEÇÕES DE CONTEÚDO (inicio.css) --- */
+
+.section {
+    padding: 6rem 0; 
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Título da Seção --- */
+.section-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 4rem;
+    padding-bottom: 25px; 
+}
+
+.section-header h2 {
+    color: var(--primary-color); 
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.section-header h2::after {
+    content: ''; 
+    display: block; 
+    width: 60px; 
+    height: 4px; 
+    background-color: var(--highlight-color); 
+    margin: 15px auto 0; 
+    border-radius: 2px;
+}
+
+.section-header p {
+    color: var(--secondary-color); 
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+/* --- Layout da Grade de Conteúdo (Zig-Zag) --- */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr; 
+    gap: 4.5rem; 
+    align-items: center;
+}
+
+#solucao .content-grid {
+    grid-template-areas: "image text";
+    grid-template-columns: 1fr 1.3fr;
+}
+
+#carteira-digital .content-grid,
+#tecnologia .content-grid {
+    grid-template-areas: "text image";
+    grid-template-columns: 1.3fr 1fr;
+}
+
+/* --- Estilização da Imagem --- */
+.content-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.5s ease;
+}
+
+.content-img img:hover {
+    transform: scale(1.02);
+}
+
+/* --- Estilização do Texto --- */
+.content-text h3 {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.content-text p {
+    font-size: 1.15rem; 
+    color: var(--text-color, #495057); 
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.content-text strong {
+    color: var(--highlight-color); 
+    font-weight: 700;
+}
+
+
+/* --- Responsividade para Grades de Conteúdo --- */
+@media (max-width: 992px) {
+    .content-grid {
+        grid-template-columns: 1fr; 
+        gap: 3rem;
+        grid-template-areas: "text" "image" !important;
+    }
+
+    .content-img { order: 2; }
+    .content-text { order: 1; }
+    
+    .content-img, 
+    .content-text {
+        grid-area: auto !important;
+    }
+}
+
+
+/* --- Seção: Por Que Escolher a Petto? (#why-choose) --- */
+
+#why-choose {
+    background-color: var(--background-color, #f8f9fa) !important; 
+    padding: 6rem 0;
+}
+
+#why-choose .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 40px; 
+    align-items: start;
+}
+
+.main-feature {
+    background-color: transparent; 
+    padding: 0; 
+    border: none; 
+    box-shadow: none; 
+    padding-right: 20px;
+    height: 100%;
+}
+
+.main-feature h3 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.main-feature p {
+    font-size: 1.1rem;
+    color: var(--text-color, #495057);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.main-feature strong {
+    color: var(--highlight-color); 
+    font-weight: 700;
+}
+
+/* --- Estilo do Botão CTA --- */
+.cta-link {
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    padding: 12px 30px; 
+    background-color: var(--highlight-color); 
+    color: var(--light-text-color);
+    text-decoration: none;
+    border-radius: 8px; 
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); 
+    transition: all 0.3s ease;
+    border: 1px solid var(--highlight-color);
+}
+
+.cta-link:hover {
+    background-color: var(--primary-color); 
+    border-color: var(--primary-color);
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); 
+}
+
+/* Cards Secundários */
+.secondary-values {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.value-card {
+    background-color: #ffffff; 
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e9ecef);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.value-card h4 {
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.value-card p {
+    font-size: 1rem;
+    color: var(--text-color, #495057);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Responsividade Why Choose --- */
+@media (max-width: 992px) {
+    .values-grid {
+        grid-template-columns: 1fr; 
+        gap: 30px;
+    }
+
+    .main-feature {
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+}
+
+
+/* --- Seção: Nossas Funcionalidades Chave (#funcionalidades) --- */
+
+#funcionalidades {
+    background-color: var(--background-color, #f8f9fa) !important; 
+    padding: 6rem 0;
+}
+
+#funcionalidades .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background-color: #ffffff; 
+    padding: 35px;
+    border-radius: 12px;
+    text-align: left;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    border: 1px solid var(--border-color, #e9ecef); 
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); 
+    border-color: var(--highlight-color); 
+}
+
+/* Ícones */
+.feature-card .icon {
+    font-size: 1.8rem;
+    color: var(--light-text-color); 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px; 
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--highlight-color); 
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .icon {
+    background-color: var(--primary-color);
+    color: var(--highlight-color);
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    color: var(--primary-color); 
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.feature-card p {
+    font-size: 1.05rem;
+    color: var(--text-color, #495057); 
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Responsividade Funcionalidades --- */
+@media (max-width: 992px) {
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+}
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* --- Seção: Nossa Jornada de Parceria (#jornada) --- */
+
+#jornada {
+    padding: 6rem 0;
+}
+
+.jornada-content {
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}

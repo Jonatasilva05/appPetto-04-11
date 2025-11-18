@@ -1,10 +1,10 @@
 // app/context/AuthContext.tsx
 
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import * as SecureStore from 'expo-secure-store';
 import { useProtectedRoute } from '@/app/hooks/useProtectedRoute';
+import * as SecureStore from 'expo-secure-store';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
-export const API_BASE_URL = 'http://192.168.14.173:3000'; // Mantenha seu IP aqui
+export const API_BASE_URL = 'http://192.168.56.1:3000'; // Mantenha seu IP aqui
 export const API_URL = `${API_BASE_URL}/api`;
 
 const TOKEN_KEY = 'auth-token-petto';
