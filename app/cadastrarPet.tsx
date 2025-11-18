@@ -311,10 +311,15 @@ export default function CadastrarPetScreen() {
         formData.append('idade_dias', idadeDiasExtra);
       }
     } else {
-      formData.append(
-        'data_nascimento',
-        dataNascimento.split('/').reverse().join('-'),
-      );
+       // ✅ NOVA LÓGICA DE SEGURANÇA
+       if (dataNascimento && dataNascimento.length === 10) {
+           const dataFormatada = dataNascimento.split('/').reverse().join('-');
+           formData.append('data_nascimento', dataFormatada);
+       } else {
+           Alert.alert("Erro na Data", "Por favor, selecione uma data válida no calendário.");
+           setIsLoading(false);
+           return;
+       }
     }
 
     const vacinasParaEnviar = historicoVacinas.map((v) => {
@@ -356,9 +361,12 @@ export default function CadastrarPetScreen() {
     try {
       const response = await fetch(`${API_URL}/pets`, {
         method: 'POST',
-        headers: { ...getAuthHeader(), 'Content-Type': 'multipart-form-data' },
+        headers: {
+          ...getAuthHeader(),
+        },
         body: formData,
       });
+      
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Erro ao cadastrar');
       Alert.alert('Sucesso!', `${nome} foi cadastrado com sucesso!`, [
@@ -387,21 +395,18 @@ export default function CadastrarPetScreen() {
   };
 
   const onChangeDatePicker = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    // Esconde o seletor
     setShowDatePicker(false);
     
     if (event.type === 'set' && selectedDate) {
-      // Se o usuário selecionou uma data
       setDatePickerDate(selectedDate);
       
-      // Formata a data para DD/MM/AAAA
+      // --- CORREÇÃO: Forçar 2 dígitos (padStart) para evitar erro de formatação ---
       const day = String(selectedDate.getDate()).padStart(2, '0');
-      const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexado
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); 
       const year = selectedDate.getFullYear();
       
+      // Agora a string fica perfeita: "05/09/2023"
       setDataNascimento(`${day}/${month}/${year}`);
-      
-      // Se o usuário selecionou uma data, desmarca o "Não sei a data"
       setNaoSeiDataNascimento(false);
     }
   };

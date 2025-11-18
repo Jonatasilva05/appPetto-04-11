@@ -4,7 +4,7 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import * as SecureStore from 'expo-secure-store';
 import { useProtectedRoute } from '@/app/hooks/useProtectedRoute';
 
-export const API_BASE_URL = 'http://192.168.14.173:3000'; // Mantenha seu IP aqui
+export const API_BASE_URL = 'http://192.168.56.1:3000'; // Mantenha seu IP aqui
 export const API_URL = `${API_BASE_URL}/api`;
 
 const TOKEN_KEY = 'auth-token-petto';

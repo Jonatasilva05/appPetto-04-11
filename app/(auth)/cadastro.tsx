@@ -210,11 +210,6 @@ export default function CadastroScreen() {
                             <Text style={styles.securityQuestionTitle}>Perguntas de Segurança</Text>
                             <View style={styles.inputContainer}><Ionicons name="paw-outline" size={24} color="#ccc" style={styles.inputIcon} /><TextInput style={styles.input} placeholder="Nome do seu primeiro pet?" value={primeiroPet} onChangeText={setPrimeiroPet} /></View>
                             <View style={styles.inputContainer}><Ionicons name="color-palette-outline" size={24} color="#ccc" style={styles.inputIcon} /><TextInput style={styles.input} placeholder="Qual sua cor favorita?" value={corFavorita} onChangeText={setCorFavorita} /></View>
-
-                            <View style={styles.switchContainer}>
-                                <Text style={styles.switchLabel}>Sou Veterinário </Text>
-                                <Switch trackColor={{ false: "#767577", true: "#81b0ff" }} thumbColor={isVeterinario ? "#274472" : "#f4f3f4"} value={isVeterinario} onValueChange={setIsVeterinario} />
-                            </View>
                             
                             {error ? <Text style={styles.errorText}>{error}</Text> : null}
                             <TouchableOpacity style={styles.button} onPress={handleNextStep} disabled={loading}>{loading ? <ActivityIndicator color="#fff"/> : <Text style={styles.buttonText}>{isVeterinario ? 'Próximo' : 'Registrar'}</Text>}</TouchableOpacity>
@@ -340,17 +335,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   requirementText: { marginLeft: 8, fontSize: 14 },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginVertical: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 12,
-  },
-  switchLabel: { color: '#fff', fontSize: 16 },
   backButton: { position: 'absolute', top: 60, left: 0, zIndex: 10 },
   // MUDANÇA 2: Adicionado o estilo 'inlineErrorText' que estava faltando
   inlineErrorText: {
