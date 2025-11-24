@@ -35,10 +35,51 @@ class AuthController
         }
         return NULL;
     }
+    
+    /**
+     * Função robusta para validar o CPF.
+     * @param string $cpf O CPF a ser validado
+     * @return bool True se o CPF for válido, False caso contrário
+     */
+    private function validateCpf($cpf) {
+        // Remove caracteres não numéricos
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
-// app/controllers/authController.php
-// ... código anterior
+        // Verifica se tem 11 dígitos
+        if (strlen($cpf) !== 11) {
+            return false;
+        }
 
+        // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        // Valida 1o digito verificador
+        for ($i = 0, $j = 10, $soma = 0; $i < 9; $i++, $j--) {
+            $soma += $cpf[$i] * $j;
+        }
+        $resto = $soma % 11;
+        $digito1 = $resto < 2 ? 0 : 11 - $resto;
+
+        if ($cpf[9] != $digito1) {
+            return false;
+        }
+
+        // Valida 2o digito verificador
+        for ($i = 0, $j = 11, $soma = 0; $i < 10; $i++, $j--) {
+            $soma += $cpf[$i] * $j;
+        }
+        $resto = $soma % 11;
+        $digito2 = $resto < 2 ? 0 : 11 - $resto;
+
+        if ($cpf[10] != $digito2) {
+            return false;
+        }
+
+        return true;
+    }
+    
     public function login()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -83,8 +124,7 @@ class AuthController
         include __DIR__ . '/../views/auth/login.php';
     }
 
-// ... código posterior
-
+    // Cadastro de Tutor (Com validações específicas de e-mail e senha)
     public function register_tutor()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -93,7 +133,29 @@ class AuthController
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
+            $errors = []; // Array para armazenar erros específicos por campo
             
+            // Validação de E-mail
+            $email = $data['email'] ?? '';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = "O formato do e-mail é inválido.";
+            }
+            
+            // Validação de Senha (Mínimo 8 dígitos)
+            $senha = $data['senha'] ?? '';
+            if (strlen($senha) < 8) {
+                $errors['senha'] = "A senha deve ter no mínimo 8 caracteres.";
+            }
+
+            // Se houver erros, armazena dados e erros na sessão e redireciona
+            if (!empty($errors)) {
+                $_SESSION['form_data'] = $_POST;
+                $_SESSION['errors'] = $errors; // Armazena erros específicos
+                header('Location: /petto/auth/register_tutor');
+                exit;
+            }
+            
+            // Continuar com o cadastro se não houver erros
             $data['foto_url'] = $this->handleFileUpload('foto_perfil');
 
             $userModel = new User();
@@ -105,7 +167,7 @@ class AuthController
 
             if (isset($result['error'])) {
                 $_SESSION['form_data'] = $_POST;
-                $_SESSION['erro'] = $result['error'];
+                $_SESSION['erro'] = $result['error']; // Erros de DB ou outros genéricos ainda usam 'erro'
                 header('Location: /petto/auth/register_tutor');
                 exit;
             }
@@ -118,7 +180,7 @@ class AuthController
         include __DIR__ . '/../views/auth/register_tutor.php';
     }
 
-    // Cadastro de Veterinário (CORRIGIDO)
+    // Cadastro de Veterinário (Com validações específicas de e-mail, senha e CPF)
     public function register_vet()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -127,6 +189,37 @@ class AuthController
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
+            $errors = []; // Array para armazenar erros específicos por campo
+            
+            // Validação de E-mail
+            $email = $data['email'] ?? '';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = "O formato do e-mail é inválido.";
+            }
+            
+            // Validação de Senha (Mínimo 8 dígitos)
+            $senha = $data['senha'] ?? '';
+            if (strlen($senha) < 8) {
+                $errors['senha'] = "A senha deve ter no mínimo 8 caracteres.";
+            }
+            
+            // Validação de CPF
+            $cpf = $data['cpf'] ?? '';
+            if (empty($cpf)) {
+                 $errors['cpf'] = "O campo CPF é obrigatório.";
+            } elseif (!$this->validateCpf($cpf)) {
+                $errors['cpf'] = "O CPF informado é inválido.";
+            }
+            
+            // Se houver erros, armazena dados e erros na sessão e redireciona
+            if (!empty($errors)) {
+                $_SESSION['form_data'] = $_POST;
+                $_SESSION['errors'] = $errors; // Armazena erros específicos
+                header('Location: /petto/auth/register_vet');
+                exit;
+            }
+
+            // Continuar com o cadastro se não houver erros
             $userModel = new User();
             $vetModel = new Veterinario();
             $user_id = null;
@@ -188,7 +281,7 @@ class AuthController
                 }
                 
                 $_SESSION['form_data'] = $_POST; 
-                $_SESSION['erro'] = "Erro ao finalizar o cadastro completo: " . $e->getMessage();
+                $_SESSION['erro'] = "Erro ao finalizar o cadastro completo: " . $e->getMessage(); // Erros de DB ou outros genéricos ainda usam 'erro'
                 header('Location: /petto/auth/register_vet');
                 exit;
             }

@@ -57,7 +57,6 @@ if (session_status() == PHP_SESSION_NONE) {
                 </form>
 
                 <div class="forgot-password-link">
-                    <a href="#" data-lang-key="login-forgot-password"></a>
                 </div>
 
                 <div class="registration-footer">

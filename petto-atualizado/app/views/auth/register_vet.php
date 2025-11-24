@@ -6,16 +6,40 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Buscando e limpando mensagens de erro/sucesso da sessão
-$erro = $_SESSION['erro'] ?? '';
+$erro = $_SESSION['erro'] ?? ''; // Mantém para erros genéricos (DB)
 $sucesso = $_SESSION['sucesso'] ?? '';
-unset($_SESSION['erro'], $_SESSION['sucesso']);
+$errors = $_SESSION['errors'] ?? []; // Erros específicos de validação do back-end
+unset($_SESSION['erro'], $_SESSION['sucesso'], $_SESSION['errors']); // Limpa as mensagens (temporário)
 
 // Lógica de Retenção de Dados: Puxa dados salvos na sessão em caso de erro
 $post_data = $_SESSION['form_data'] ?? [];
 unset($_SESSION['form_data']); 
 ?>
 <body class="register-body">
+    
+    <style>
+        /* Estilo para erro (Back-end ou Real-time) */
+        .form-group input.is-invalid {
+            border: 1px solid red !important;
+        }
+        .form-group .error-message {
+            color: red;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: block;
+        }
 
+        /* NOVO: Estilo para sucesso em tempo real (On-the-fly) */
+        .form-group input.is-valid {
+            border: 1px solid green !important;
+        }
+        .form-group .success-message {
+            color: green;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
     <section class="register-section">
         
         <div class="register-overlay">
@@ -59,14 +83,32 @@ unset($_SESSION['form_data']);
                             <label data-lang-key="register-name-label"></label>
                             <input type="text" name="nome" required value="<?= htmlspecialchars($post_data['nome'] ?? '') ?>">
                         </div>
+                        
                         <div class="form-group">
                             <label data-lang-key="register-email-label"></label>
-                            <input type="email" name="email" required value="<?= htmlspecialchars($post_data['email'] ?? '') ?>">
+                            <input type="email" 
+                                   name="email" 
+                                   required 
+                                   value="<?= htmlspecialchars($post_data['email'] ?? '') ?>"
+                                   class="<?= isset($errors['email']) ? 'is-invalid' : '' ?>">
+                            <?php if (isset($errors['email'])): ?>
+                                <span class="error-message"><?= $errors['email'] ?></span>
+                            <?php endif; ?>
                         </div>
+                        
                         <div class="form-group">
                             <label data-lang-key="register-password-label"></label>
-                            <input type="password" name="senha" id="vet-senha" required>
+                            <input type="password" 
+                                   name="senha" 
+                                   id="vet-senha" 
+                                   minlength="8" 
+                                   required
+                                   class="<?= isset($errors['senha']) ? 'is-invalid' : '' ?>">
+                            <?php if (isset($errors['senha'])): ?>
+                                <span class="error-message"><?= $errors['senha'] ?></span>
+                            <?php endif; ?>
                         </div>
+
                         <div class="form-group">
                             <label data-lang-key="register-phone-label"></label>
                             <input type="text" name="telefone" value="<?= htmlspecialchars($post_data['telefone'] ?? '') ?>">
@@ -86,10 +128,20 @@ unset($_SESSION['form_data']);
                             <label data-lang-key="register-address-label"></label>
                             <input type="text" name="endereco_pessoal" value="<?= htmlspecialchars($post_data['endereco_pessoal'] ?? '') ?>">
                         </div>
+                        
                         <div class="form-group">
                             <label>CPF:</label>
-                            <input type="text" name="cpf" value="<?= htmlspecialchars($post_data['cpf'] ?? '') ?>">
+                            <input type="text" 
+                                   name="cpf" 
+                                   required 
+                                   maxlength="14" 
+                                   value="<?= htmlspecialchars($post_data['cpf'] ?? '') ?>"
+                                   class="<?= isset($errors['cpf']) ? 'is-invalid' : '' ?>">
+                            <?php if (isset($errors['cpf'])): ?>
+                                <span class="error-message"><?= $errors['cpf'] ?></span>
+                            <?php endif; ?>
                         </div>
+                        
                         <div class="form-group">
                             <label data-lang-key="register-crvm-label"></label>
                             <input type="text" name="crmv" required value="<?= htmlspecialchars($post_data['crmv'] ?? '') ?>">
@@ -164,3 +216,4 @@ unset($_SESSION['form_data']);
     <script src="/petto/js/traduzir.js"></script>
     <script src="/petto/js/mensagem.js"></script>
     <script src="/petto/js/register_multistep.js"></script>
+    <script src="/petto/js/validation_utils.js"></script>
